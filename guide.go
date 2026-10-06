@@ -23,15 +23,17 @@ func helpJSON() string {
 			{"name": "help", "args": "", "summary": "human help (also -h, --help)"},
 		},
 		"options": []string{"--root", "--dest", "--state", "--only", "--all", "--apply", "--human", "--measure"},
+		// Top-level so agents (and cli-spec-conformance) can read it without
+		// knowing the contract shape: the code equals .error.code on failure.
+		"exit_codes": map[string]string{
+			"0": "ok", "80-89": "input", "90-99": "state",
+			"91": "nothing to undo", "100-109": "external", "110-119": "internal",
+		},
 		"contract": map[string]any{
 			"json_by_default":    true,
 			"dry_run_by_default": true,
 			"stdout":             "data (JSON unless --human)",
 			"stderr":             "progress and warnings",
-			"exit_codes": map[string]string{
-				"0": "ok", "80-89": "input", "90-99": "state",
-				"91": "nothing to undo", "100-109": "external", "110-119": "internal",
-			},
 		},
 	}
 	b, _ := json.Marshal(body)
