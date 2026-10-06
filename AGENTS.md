@@ -86,7 +86,12 @@ and both test suites.
 go build -o organizate-go .    # stdlib only
 go test ./...                  # unit tests
 ./test/run.sh                  # full CLI suite → "passed N, failed 0"
+cli-spec-conformance check ./organizate-go --specs output,guide   # 19/19, exit 0
 ```
+
+Adopted specs: **cli-output-spec** + **cli-guide-spec** (README §Spec
+conformance). Any new command or flag must keep that check at 19/19: typed
+error shape, exit code == `.error.code`, nothing extra on stdout.
 
 The suite builds fresh, runs against a temp fixture, and traps its cleanup —
 `/tmp` must be clean afterwards.

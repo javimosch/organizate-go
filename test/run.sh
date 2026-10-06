@@ -163,6 +163,17 @@ print(sum(1 for i in d['items'] if i['name'] == '.bashrc' and i['action'] == 'no
 ")
 if [ "$HAS_HIDDEN" = "1" ]; then ok "hidden file action=none in scan"; else bad "hidden file action=none in scan"; fi
 
+echo "== spec conformance (skipped when the checker is not installed)"
+if command -v cli-spec-conformance >/dev/null 2>&1; then
+  if cli-spec-conformance check "$ORG" --specs output,guide >"$WORK/spec.json" 2>&1; then
+    ok "cli-spec-conformance output,guide (19/19)"
+  else
+    bad "cli-spec-conformance output,guide"; tail -5 "$WORK/spec.json"
+  fi
+else
+  echo "  skip cli-spec-conformance (not on PATH; see README §Spec conformance)"
+fi
+
 echo
 echo "passed $PASS, failed $FAIL"
 if [ "$FAIL" -gt 0 ]; then exit 1; fi

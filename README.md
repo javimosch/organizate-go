@@ -43,6 +43,28 @@ $ organizate-go apply --only debris --apply     # now it acts
 | 100-109 | external | `100` a move/journal I/O failure (recoverable) |
 | 110-119 | internal | `110` JSON encode failure (a bug) |
 
+## Spec conformance
+
+Aligns to the [Agent-First CLI Specs](https://cli-specs.intrane.fr/), verified
+by [cli-spec-conformance](https://github.com/javimosch/cli-spec-conformance)
+(black-box: it reads stdout, stderr and exit codes only):
+
+| spec | adopted | evidence |
+|------|---------|----------|
+| [cli-output-spec](https://github.com/javimosch/cli-output-spec) | **yes** | 12/12 — stdout=data, exit codes 80-119, typed errors, help-json, no ANSI |
+| [cli-guide-spec](https://github.com/javimosch/cli-guide-spec) | **yes** | 7/7 — guide embedded (works behind a dead proxy), JSON default, `--human` |
+| [cli-daemon-spec](https://github.com/javimosch/cli-daemon-spec) | no — no server, by design | a full run fails its 7 daemon MUST checks; this tool never binds a socket |
+| [cli-trial-spec](https://github.com/javimosch/cli-trial-spec) | no — not hosted | no server, no accounts |
+| [cli-feedback-spec](https://github.com/javimosch/cli-feedback-spec), [cli-update-spec](https://github.com/javimosch/cli-update-spec), [cli-telemetry-spec](https://github.com/javimosch/cli-telemetry-spec) | no — external services | organizate-go makes **zero network calls**; a relay, release host and collector are out of scope for v1.0 |
+
+```sh
+cli-spec-conformance check ./organizate-go --specs output,guide
+# {"version":"1.0","ok":true,"summary":{"total":19,"passed":19,"must_failed":0,"should_failed":0}}  → exit 0
+```
+
+`./test/run.sh` runs the same check whenever `cli-spec-conformance` is on
+`PATH` (and skips it, visibly, when it is not).
+
 ## Commands
 
 ```bash

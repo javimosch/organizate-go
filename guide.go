@@ -44,6 +44,9 @@ func guideJSON() string {
 	body := map[string]any{
 		App:       "An agent-first, dry-run-by-default tidy: the JSON sibling of the organizate TUI.",
 		"version": Version,
+		// Self-describing: an agent must be able to learn which contracts this
+		// binary is held to without fetching anything.
+		"conforms_to": []string{"cli-output-spec", "cli-guide-spec"},
 		"one_liner": "Scans a root directory, classifies every top-level entry, proposes moves, and refuses " +
 			"to touch anything unless you pass --apply — so an agent can plan first, show its work, then act.",
 		"model": map[string]string{
@@ -151,6 +154,12 @@ func guideMarkdown() string {
 		"0 ok, 80-89 input, 90-99 state (91 = nothing to undo), 100-109 external, 110-119 internal.",
 		"apply --apply that failed part-way exits 100 with errors[] in the body; undo that could not",
 		"restore exits 90 with the blocker in .message.",
+		"",
+		"## Specs",
+		"",
+		"Adopts cli-output-spec and cli-guide-spec (https://cli-specs.intrane.fr/); verified with",
+		"cli-spec-conformance check <binary> --specs output,guide -> 19/19, exit 0.",
+		"No daemon, no telemetry, no network calls at all - offline by design.",
 	}
 	out := ""
 	for i, l := range lines {
