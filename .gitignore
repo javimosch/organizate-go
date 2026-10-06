@@ -1,0 +1,6 @@
+# built binary
+/organizate-go
+
+# editor / OS
+*.swp
+.DS_Store
